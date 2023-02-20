@@ -94,9 +94,13 @@ export class MessagesService {
     )(incoming, author);
   }
 
-  async findForRoom(roomId: string): Promise<Message[]> {
+  async findForRoom(roomId: string, user: User): Promise<Message[]> {
+    const room = await this.roomsRepo.getRoom(roomId);
+    await this.authService.authorize({ user, room, action: 'read' });
+
     const allMessages = await this.messagesRepo.getMessagesForRoom(roomId);
     const publicMessages = R.pipe(R.reject(isPrivate))(allMessages);
+
     return publicMessages;
   }
 }

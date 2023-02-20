@@ -18,7 +18,7 @@ export interface AuthorizeParams {
   user: User;
   room: Room;
   action: 'read' | 'write' | 'manage';
-  message: string;
+  message?: string;
 }
 
 export interface AuthService {

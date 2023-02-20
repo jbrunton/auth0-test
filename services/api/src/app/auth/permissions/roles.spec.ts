@@ -19,7 +19,12 @@ describe('defineRolesForUser', () => {
   });
 
   it('grants read and write permissions for joined rooms', () => {
-    const room = subject('Room', RoomFactory.build());
+    const room = subject(
+      'Room',
+      RoomFactory.build({
+        contentPolicy: 'private',
+      }),
+    );
     const memberships: Membership[] = [
       {
         userId: user.id,
@@ -39,5 +44,20 @@ describe('defineRolesForUser', () => {
     expect(otherUserAbility.can('read', room)).toEqual(false);
     expect(otherUserAbility.can('write', room)).toEqual(false);
     expect(otherUserAbility.can('manage', room)).toEqual(false);
+  });
+
+  it('grants read permissions for public rooms', () => {
+    const room = subject(
+      'Room',
+      RoomFactory.build({
+        contentPolicy: 'public',
+      }),
+    );
+
+    const userAbility = defineRolesForUser(user, []);
+
+    expect(userAbility.can('read', room)).toEqual(true);
+    expect(userAbility.can('write', room)).toEqual(false);
+    expect(userAbility.can('manage', room)).toEqual(false);
   });
 });

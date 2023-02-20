@@ -8,5 +8,7 @@ export const RoomFactory = {
     id: overrides?.id ?? RoomFactory.id(),
     name: overrides?.name ?? `${faker.word.adjective()}-${faker.word.noun()}`,
     ownerId: overrides?.ownerId ?? UserFactory.id(),
+    contentPolicy: overrides?.contentPolicy ?? 'private',
+    joinPolicy: overrides?.joinPolicy ?? 'invite',
   }),
 };
