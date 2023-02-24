@@ -14,12 +14,20 @@ export interface AuthInfo {
   email_verified?: boolean;
 }
 
-export interface AuthorizeParams {
+export type AuthorizeParams = {
   user: User;
-  room: Room;
   action: 'read' | 'write' | 'manage';
   message?: string;
-}
+} & (
+  | {
+      subjectType: 'Room';
+      subject: Room;
+    }
+  | {
+      subjectType: 'User';
+      subject: User;
+    }
+);
 
 export interface AuthService {
   authorize(params: AuthorizeParams): Promise<void>;
